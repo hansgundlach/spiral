@@ -43,6 +43,24 @@ SPIRAL employs an actor-learner architecture for scalable self-play training. Pa
 ## Usage
 
 ### Installation
+
+#### Quick Setup (Recommended)
+```bash
+# clone codebase
+git clone git@github.com:spiral-rl/spiral.git && cd spiral
+
+# prepare environment
+conda create -y -n spiral python=3.10
+conda activate spiral
+
+# automated installation
+bash install.sh
+
+# setup wandb
+wandb login YOUR_WANDB_API_KEY
+```
+
+#### Manual Installation
 ```bash
 # clone codebase
 git clone git@github.com:spiral-rl/spiral.git && cd spiral
@@ -52,9 +70,10 @@ conda create -y -n spiral python=3.10
 conda activate spiral
 
 # install dependencies
-pip install vllm==0.8.4 && pip install oat-llm==0.1.3.post1
-pip install -e .
+pip install -r requirements.txt
 ```
+
+📖 **For detailed setup instructions, see [SETUP.md](SETUP.md)**
 
 ### Training
 
