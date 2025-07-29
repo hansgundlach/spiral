@@ -48,15 +48,18 @@ export NCCL_CUMEM_ENABLE=0
 export LP_DEBUG=1
 export LP_LOG_LEVEL=DEBUG
 
-# Simplified Training Configuration
+# Simplified Training Configuration - GAME METRICS ONLY
 # - No external API opponents (only random opponent)
-# - Single environment for focused training
-# - Reduced evaluation overhead
-# - All metrics logged to wandb for monitoring
+# - Single environment for focused training  
+# - NO benchmark evaluations (disabled by default with --eval_data "")
+# - Only game metrics logged to wandb for monitoring LLM game improvement
+# 
+# To enable benchmark evaluations later, change --eval_data "" to --eval_data "./data"
 
 python train_spiral.py \
     --env_id KuhnPoker-v1 \
     --use_llm_obs_wrapper \
+    --filter_zero_adv \
     --eval_env_ids KuhnPoker-v1 \
     --eval_use_llm_obs_wrappers True \
     --eval_opponent_names random \
@@ -66,9 +69,9 @@ python train_spiral.py \
     --gradient-checkpointing \
     --zero_stage 3 \
     --adam_offload \
-    --lora-rank 32 \
-    --lora-alpha 32 \
-    --lora-dropout 0.1 \
+    --lora-rank 16 \
+    --lora-alpha 16 \
+    --lora-dropout 0.0 \
     --target-modules all-linear \
     --num_samples 1 \
     --rollout_batch_size 32 \
@@ -76,11 +79,11 @@ python train_spiral.py \
     --num_envs 1 \
     --rollout_batch_size_per_device 2 \
     --pi_buffer_maxlen_per_device 2 \
-    --pretrain Qwen/Qwen3-4B-Base \
-    --enable_prefix_caching \
+    --pretrain Qwen/Qwen2.5-1.5B-Instruct \
+    --enable-prefix-caching \
     --collocate \
-    --vllm_sleep \
-    --vllm_gpu_ratio 0.6 \
+    --vllm-sleep \
+    --vllm-gpu-ratio 0.4 \
     --rnd-seed \
     --learning_rate 0.000001 \
     --lr_scheduler constant \
@@ -94,14 +97,19 @@ python train_spiral.py \
     --max_context_length 8192 \
     --temperature 1.0 \
     --top_p 1 \
-    --eval_steps 8 \
+    --eval_steps 2 \
     --save_steps -1 \
-    --eval_games 8 \
+    --eval_games 2 \
     --eval_temperature 0.6 \
     --eval_top_p 0.95 \
     --eval_generate_max_length 4096 \
     --max_train 100 \
     --max_save_num 10 \
+    --eval_data "" \
     --use-wb \
-    --wb-run-name spiral-simple-kuhn-poker \
+    --wb-run-name spiral-qwen2.5-1.5b-kuhn-poker \
     --wb_project spiral-simple
+
+
+
+
